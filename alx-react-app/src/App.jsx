@@ -1,3 +1,4 @@
+import UserProfile from './components/UserProfile';
 import Header from './components/Header';
 import MainContent from './components/MainContent';
 import Footer from './components/Footer';
@@ -37,6 +38,7 @@ function App() {
       <Header />
       <MainContent />
       <Footer />
+      <UserProfile name="Jeddy" age="22" bio="Likes playing piano" />
     </>
     
   )
