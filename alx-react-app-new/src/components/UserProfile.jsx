@@ -7,7 +7,7 @@ function UserProfile(props) {
             margin:'10px'
         }
     }>
-        <h2 style={{color: 'green'}}>{props.name}</h2>
+        <h2 style={{color: 'blue'}}>{props.name}</h2>
         <p>Age: <span style={{fontWeight: 'bold'}}>{props.age}</span></p>
         <p> <span style={{color: 'yellow', fontFamily: 'cursive'}}>{props.bio}</span></p>
     </div>
