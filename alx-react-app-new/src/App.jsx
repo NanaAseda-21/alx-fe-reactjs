@@ -33,16 +33,13 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
-
       <WelcomeMessage />
       <Header />
       <MainContent />
       <Footer />
       <UserProfile name="Jeddy" age="22" bio="Loves playing piano" />
     </>
-    
   )
 }
 
 export default App
-
