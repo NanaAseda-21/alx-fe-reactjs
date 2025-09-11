@@ -1,4 +1,4 @@
-import UserContext from "./UserContext";
+import UserContext from "./components/UserContext";
 import ProfilePage from "./components/ProfilePage";
 import UserDetails from "./components/UserDetails";
 
