@@ -1,14 +1,14 @@
-// src/components/RecipeDetails.jsx
 import React from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import useRecipeStore from '../recipeStore';
+import EditRecipeForm from './EditRecipeForm';
 import DeleteRecipeButton from './DeleteRecipeButton';
+import FavoriteButton from './FavoriteButton';
 
 const RecipeDetails = () => {
-  const { id } = useParams(); // id is a string from the URL
-  // find recipe robustly regardless of whether ids are strings or numbers
-  const recipe = useRecipeStore((s) =>
-    s.recipes.find((r) => String(r.id) === id)
+  const { id } = useParams();
+  const recipe = useRecipeStore((state) =>
+    state.recipes.find((r) => r.id === Number(id))
   );
 
   if (!recipe) return <p>Recipe not found.</p>;
@@ -16,22 +16,13 @@ const RecipeDetails = () => {
   return (
     <div>
       <h1>{recipe.title}</h1>
-
-      {/* include recipe.id explicitly so the checker finds it */}
-      <p>ID: {recipe.id}</p>
-
       <p>{recipe.description}</p>
 
-      <div style={{ marginTop: '1rem' }}>
-        <Link to={`/recipes/${recipe.id}/edit`}>
-          <button>Edit Recipe</button>
-        </Link>{' '}
-        <DeleteRecipeButton recipeId={recipe.id} />
-      </div>
+      {/* Add Favorite button here */}
+      <FavoriteButton recipeId={recipe.id} />
 
-      <div style={{ marginTop: '1rem' }}>
-        <Link to="/">← Back to list</Link>
-      </div>
+      <EditRecipeForm recipeId={recipe.id} />
+      <DeleteRecipeButton recipeId={recipe.id} />
     </div>
   );
 };

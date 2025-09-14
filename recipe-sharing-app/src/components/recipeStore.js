@@ -2,50 +2,50 @@ import { create } from 'zustand';
 
 const useRecipeStore = create((set, get) => ({
   recipes: [],
-  searchTerm: '',
-  filteredRecipes: [],
+  favorites: [],
+  recommendations: [],
 
   addRecipe: (recipe) =>
     set((state) => ({
       recipes: [...state.recipes, recipe],
-      filteredRecipes: [...state.recipes, recipe], // keep filtered in sync
     })),
 
   deleteRecipe: (id) =>
-    set((state) => {
-      const updated = state.recipes.filter((r) => r.id !== id);
-      return {
-        recipes: updated,
-        filteredRecipes: updated.filter((r) =>
-          r.title.toLowerCase().includes(state.searchTerm.toLowerCase())
-        ),
-      };
-    }),
+    set((state) => ({
+      recipes: state.recipes.filter((r) => r.id !== id),
+      favorites: state.favorites.filter((favId) => favId !== id), // clean up if deleted
+    })),
 
   updateRecipe: (id, updatedData) =>
-    set((state) => {
-      const updated = state.recipes.map((r) =>
-        r.id === id ? { ...r, ...updatedData } : r
-      );
-      return {
-        recipes: updated,
-        filteredRecipes: updated.filter((r) =>
-          r.title.toLowerCase().includes(state.searchTerm.toLowerCase())
-        ),
-      };
-    }),
-
-  setSearchTerm: (term) => {
-    set({ searchTerm: term });
-    get().filterRecipes();
-  },
-
-  filterRecipes: () =>
     set((state) => ({
-      filteredRecipes: state.recipes.filter((recipe) =>
-        recipe.title.toLowerCase().includes(state.searchTerm.toLowerCase())
+      recipes: state.recipes.map((r) =>
+        r.id === id ? { ...r, ...updatedData } : r
       ),
     })),
+
+  // --- Favorites management ---
+  addFavorite: (recipeId) =>
+    set((state) => {
+      if (!state.favorites.includes(recipeId)) {
+        return { favorites: [...state.favorites, recipeId] };
+      }
+      return {};
+    }),
+
+  removeFavorite: (recipeId) =>
+    set((state) => ({
+      favorites: state.favorites.filter((id) => id !== recipeId),
+    })),
+
+  // --- Recommendation logic (mocked) ---
+  generateRecommendations: () =>
+    set((state) => {
+      const recommended = state.recipes.filter(
+        (recipe) =>
+          state.favorites.includes(recipe.id) && Math.random() > 0.3 // randomize
+      );
+      return { recommendations: recommended };
+    }),
 }));
 
 export default useRecipeStore;
