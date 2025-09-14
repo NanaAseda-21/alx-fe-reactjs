@@ -1,5 +1,5 @@
 import React from "react";
-import useRecipeStore from "../recipeStore"; // adjust path if needed
+import useRecipeStore from "./recipeStore"; // adjust path if needed
 
 const RecipeList = () => {
   // get recipes from store
