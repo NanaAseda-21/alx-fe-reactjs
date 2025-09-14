@@ -1,17 +1,24 @@
-import { create } from 'zustand'
+import { create } from 'zustand';
 
-// Zustand store
 const useRecipeStore = create((set) => ({
   recipes: [],
 
-  // Action: add a new recipe
+  // add a recipe
   addRecipe: (newRecipe) =>
+    set((state) => ({ recipes: [...state.recipes, newRecipe] })),
+
+  // update a recipe by id with partial updates (e.g. { title, description })
+  updateRecipe: (id, updates) =>
     set((state) => ({
-      recipes: [...state.recipes, newRecipe],
+      recipes: state.recipes.map((r) => (r.id === id ? { ...r, ...updates } : r)),
     })),
 
-  // Action: replace the recipe list
-  setRecipes: (recipes) => set({ recipes }),
-}))
+  // delete a recipe by id
+  deleteRecipe: (id) =>
+    set((state) => ({ recipes: state.recipes.filter((r) => r.id !== id) })),
 
-export default useRecipeStore
+  // replace entire list (keeps backward compat)
+  setRecipes: (recipes) => set({ recipes }),
+}));
+
+export default useRecipeStore;

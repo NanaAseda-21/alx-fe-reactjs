@@ -1,35 +1,38 @@
-import React, { useState } from "react";
-import useRecipeStore from "./recipeStore"; // adjust path if needed
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import useRecipeStore from '../recipeStore';
 
 const AddRecipeForm = () => {
-  const addRecipe = useRecipeStore((state) => state.addRecipe);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const addRecipe = useRecipeStore((s) => s.addRecipe);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!title.trim() || !description.trim()) return;
 
-    if (title.trim() && description.trim()) {
-      addRecipe({ id: Date.now(), title, description });
-      setTitle("");
-      setDescription("");
-    }
+    const newRecipe = { id: Date.now(), title, description };
+    addRecipe(newRecipe);
+
+    // navigate to the newly created recipe's details page
+    navigate(`/recipes/${newRecipe.id}`);
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginBottom: "2rem" }}>
+    <form onSubmit={handleSubmit} style={{ marginBottom: '1.5rem' }}>
       <input
         type="text"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        placeholder="Recipe Title"
+        placeholder="Title"
         required
       />
       <br />
       <textarea
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        placeholder="Recipe Description"
+        placeholder="Description"
         required
       />
       <br />
