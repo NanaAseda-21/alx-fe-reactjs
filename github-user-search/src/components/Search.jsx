@@ -1,3 +1,4 @@
+// src/components/Search.jsx
 import { useState } from "react";
 import { fetchUserData, fetchAdvancedUsers } from "../services/githubService";
 
@@ -6,11 +7,11 @@ export default function Search() {
   const [location, setLocation] = useState("");
   const [minRepos, setMinRepos] = useState("");
   const [userData, setUserData] = useState(null);
-  const [users, setUsers] = useState([]); // for advanced search results
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // ✅ Basic username search
+  // ✅ Basic search
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -47,60 +48,77 @@ export default function Search() {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div className="max-w-3xl mx-auto p-6">
       {/* Basic search */}
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="flex gap-2 mb-6">
         <input
           type="text"
           placeholder="Enter GitHub username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          style={{ padding: "8px", marginRight: "10px" }}
+          className="flex-1 p-2 border rounded-lg"
         />
-        <button type="submit">Search</button>
+        <button
+          type="submit"
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+        >
+          Search
+        </button>
       </form>
 
       {/* Advanced search */}
-      <form onSubmit={handleAdvancedSearch} style={{ marginTop: "20px" }}>
+      <form
+        onSubmit={handleAdvancedSearch}
+        className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"
+      >
         <input
           type="text"
           placeholder="Username (optional)"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          style={{ padding: "8px", marginRight: "10px" }}
+          className="p-2 border rounded-lg"
         />
         <input
           type="text"
           placeholder="Location"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
-          style={{ padding: "8px", marginRight: "10px" }}
+          className="p-2 border rounded-lg"
         />
         <input
           type="number"
           placeholder="Min Repos"
           value={minRepos}
           onChange={(e) => setMinRepos(e.target.value)}
-          style={{ padding: "8px", marginRight: "10px" }}
+          className="p-2 border rounded-lg"
         />
-        <button type="submit">Advanced Search</button>
+        <button
+          type="submit"
+          className="col-span-1 md:col-span-3 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+        >
+          Advanced Search
+        </button>
       </form>
 
       {/* Conditional Rendering */}
-      {loading && <p>Loading...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {loading && <p className="text-gray-600">Loading...</p>}
+      {error && <p className="text-red-500">{error}</p>}
 
       {/* Basic single user result */}
       {userData && (
-        <div style={{ marginTop: "20px" }}>
+        <div className="p-4 border rounded-lg shadow-md">
           <img
             src={userData.avatar_url}
             alt={userData.login}
-            width="100"
-            style={{ borderRadius: "50%" }}
+            className="w-24 h-24 rounded-full mb-4"
           />
-          <h3>{userData.name || userData.login}</h3>
-          <a href={userData.html_url} target="_blank" rel="noreferrer">
+          <h3 className="text-xl font-semibold">{userData.name || userData.login}</h3>
+          <a
+            href={userData.html_url}
+            target="_blank"
+            rel="noreferrer"
+            className="text-blue-600 hover:underline"
+          >
             Visit GitHub Profile
           </a>
         </div>
@@ -108,20 +126,29 @@ export default function Search() {
 
       {/* Advanced search results list */}
       {users.length > 0 && (
-        <div style={{ marginTop: "20px" }}>
-          <h3>Search Results</h3>
-          <ul>
+        <div>
+          <h3 className="text-lg font-bold mb-4">Search Results</h3>
+          <ul className="space-y-4">
             {users.map((user) => (
-              <li key={user.id} style={{ marginBottom: "15px" }}>
+              <li
+                key={user.id}
+                className="flex items-center gap-4 p-4 border rounded-lg shadow-sm"
+              >
                 <img
                   src={user.avatar_url}
                   alt={user.login}
-                  width="50"
-                  style={{ borderRadius: "50%", marginRight: "10px" }}
+                  className="w-12 h-12 rounded-full"
                 />
-                <a href={user.html_url} target="_blank" rel="noreferrer">
-                  {user.login}
-                </a>
+                <div>
+                  <a
+                    href={user.html_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-blue-600 font-medium hover:underline"
+                  >
+                    {user.login}
+                  </a>
+                </div>
               </li>
             ))}
           </ul>
