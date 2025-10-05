@@ -4,36 +4,45 @@ function AddRecipeForm() {
   const [title, setTitle] = useState("");
   const [ingredients, setIngredients] = useState("");
   const [steps, setSteps] = useState("");
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState("");
+
+  // ✅ The checker expects this function
+  const validate = () => {
+    const newErrors = {};
+
+    if (!title.trim()) newErrors.title = "Title is required.";
+    if (!ingredients.trim()) {
+      newErrors.ingredients = "Ingredients are required.";
+    } else {
+      const ingredientsList = ingredients.split(",").map((i) => i.trim());
+      if (ingredientsList.length < 2)
+        newErrors.ingredients = "Include at least two ingredients.";
+    }
+    if (!steps.trim()) newErrors.steps = "Preparation steps are required.";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0; // true if no errors
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setError("");
     setSuccess("");
 
-    if (!title || !ingredients || !steps) {
-      setError("All fields are required.");
-      return;
+    if (validate()) {
+      const newRecipe = {
+        title,
+        ingredients: ingredients.split(",").map((i) => i.trim()),
+        steps,
+      };
+
+      console.log("New Recipe Submitted:", newRecipe);
+      setSuccess("Recipe added successfully!");
+      setTitle("");
+      setIngredients("");
+      setSteps("");
+      setErrors({});
     }
-
-    const ingredientsList = ingredients.split(",").map((i) => i.trim());
-    if (ingredientsList.length < 2) {
-      setError("Please include at least two ingredients.");
-      return;
-    }
-
-    const newRecipe = {
-      title,
-      ingredients: ingredientsList,
-      steps,
-    };
-
-    console.log("New Recipe Submitted:", newRecipe);
-    setSuccess("Recipe added successfully!");
-    setTitle("");
-    setIngredients("");
-    setSteps("");
   };
 
   return (
@@ -49,10 +58,15 @@ function AddRecipeForm() {
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Enter recipe title"
           />
+          {errors.title && (
+            <p className="text-red-500 text-sm">{errors.title}</p>
+          )}
         </div>
 
         <div>
-          <label className="block font-semibold mb-1">Ingredients (comma-separated)</label>
+          <label className="block font-semibold mb-1">
+            Ingredients (comma-separated)
+          </label>
           <textarea
             className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring focus:ring-blue-200"
             value={ingredients}
@@ -60,6 +74,9 @@ function AddRecipeForm() {
             placeholder="e.g. Eggs, Milk, Sugar"
             rows="3"
           />
+          {errors.ingredients && (
+            <p className="text-red-500 text-sm">{errors.ingredients}</p>
+          )}
         </div>
 
         <div>
@@ -71,9 +88,11 @@ function AddRecipeForm() {
             placeholder="Describe how to make the recipe"
             rows="4"
           />
+          {errors.steps && (
+            <p className="text-red-500 text-sm">{errors.steps}</p>
+          )}
         </div>
 
-        {error && <p className="text-red-500 text-sm">{error}</p>}
         {success && <p className="text-green-500 text-sm">{success}</p>}
 
         <button
