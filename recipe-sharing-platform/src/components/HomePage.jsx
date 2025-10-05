@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import data from "../data.json";
+import { Link } from "react-router-dom";
 
 const HomePage = () => {
   const [recipes, setRecipes] = useState([]);
 
-  // Load data when the component mounts
   useEffect(() => {
     setRecipes(data);
   }, []);
@@ -31,9 +31,12 @@ const HomePage = () => {
             </h2>
             <p className="text-gray-600 text-sm">{recipe.summary}</p>
 
-            <button className="mt-4 text-blue-600 hover:text-blue-800 font-medium">
+            <Link
+              to={`/recipe/${recipe.id}`}
+              className="inline-block mt-4 text-blue-600 hover:text-blue-800 font-medium"
+            >
               View Details →
-            </button>
+            </Link>
           </div>
         ))}
       </div>
