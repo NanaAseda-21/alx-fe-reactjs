@@ -4,7 +4,9 @@ import * as Yup from "yup";
 const validationSchema = Yup.object({
   username: Yup.string().required("Username is required"),
   email: Yup.string().email("Invalid email").required("Email is required"),
-  password: Yup.string().min(6, "At least 6 characters").required("Password is required"),
+  password: Yup.string()
+    .min(6, "Password must be at least 6 characters")
+    .required("Password is required"),
 });
 
 function FormikForm() {
@@ -12,13 +14,16 @@ function FormikForm() {
 
   const handleSubmit = (values, { resetForm }) => {
     console.log("Formik Form Submitted:", values);
+
     fetch("https://jsonplaceholder.typicode.com/users", {
       method: "POST",
       body: JSON.stringify(values),
       headers: { "Content-Type": "application/json" },
     })
       .then((res) => res.json())
-      .then((data) => console.log("API Response:", data));
+      .then((data) => console.log("API Response:", data))
+      .catch((err) => console.error(err));
+
     resetForm();
   };
 
@@ -43,7 +48,7 @@ function FormikForm() {
           <Field name="password" type="password" />
           <ErrorMessage name="password" component="div" style={{ color: "red" }} />
 
-          <button type="submit">Register</button>
+          <button type="submit" style={{ marginTop: "1rem" }}>Register</button>
         </Form>
       </Formik>
     </div>
