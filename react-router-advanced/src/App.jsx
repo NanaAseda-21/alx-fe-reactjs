@@ -5,6 +5,7 @@ import Profile from "./components/Profile";
 import Post from "./components/Post";
 import Login from "./components/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
+import BlogPost from "./components/BlogPost";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         {/* Basic Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
+        <Route path="/blog/:id" element={<BlogPost />} />
 
         {/* Dynamic Route Example */}
         <Route path="/posts/:id" element={<Post />} />
