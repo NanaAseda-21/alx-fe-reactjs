@@ -15,6 +15,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/blog/:id" element={<BlogPost />} />
+        <Route path="/login" element={<Login />} />
 
         {/* Dynamic Route Example */}
         <Route path="/posts/:id" element={<Post />} />

@@ -1,10 +1,10 @@
 import { Navigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 function ProtectedRoute({ children }) {
-  const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
+  const { user } = useAuth();
 
-  if (!isAuthenticated) {
-    alert("You must be logged in to view this page!");
+  if (!user) {
     return <Navigate to="/login" replace />;
   }
 
